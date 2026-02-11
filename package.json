@@ -12,6 +12,7 @@
     "build:ui": "vite build",
     "dev:ui": "vite",
     "dev": "tsx src/cli/index.ts",
+    "dev:visual-lab": "tsx src/cli/visual-lab.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",

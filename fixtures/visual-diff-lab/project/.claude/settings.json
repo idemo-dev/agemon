@@ -1,0 +1,63 @@
+{
+  "mcpServers": {
+    "github": { "type": "stdio", "command": "npx", "args": ["-y", "@modelcontextprotocol/server-github"] },
+    "playwright": { "type": "stdio", "command": "npx", "args": ["-y", "@playwright/mcp"] },
+    "postgres": { "type": "stdio", "command": "npx", "args": ["-y", "@modelcontextprotocol/server-postgres"] },
+    "fetch": { "type": "stdio", "command": "uvx", "args": ["mcp-server-fetch"] }
+  },
+  "allowedTools": ["Read", "Write", "Edit", "Bash", "WebFetch", "Grep"],
+  "deniedTools": ["Delete", "NetworkAdmin"],
+  "hooks": {
+    "PreToolUse": [
+      { "matcher": "rapid-reflex", "command": "echo rapid-1" },
+      { "matcher": "rapid-reflex", "command": "echo rapid-2" },
+      { "matcher": "rapid-reflex", "command": "echo rapid-3" },
+      { "matcher": "rapid-reflex", "command": "echo rapid-4" },
+      { "matcher": "logic-weaver", "command": "echo logic-1" },
+      { "matcher": "logic-weaver", "command": "echo logic-2" },
+      { "matcher": "github", "command": "echo gh-1" },
+      { "matcher": "github", "command": "echo gh-2" },
+      { "matcher": "postgres", "command": "echo pg-1" },
+      { "matcher": "postgres", "command": "echo pg-2" },
+      { "matcher": "legend-core", "command": "echo legend-1" },
+      { "matcher": "legend-core", "command": "echo legend-2" },
+      { "matcher": "legend-core", "command": "echo legend-3" },
+      { "matcher": "legend-core", "command": "echo legend-4" },
+      { "matcher": "legend-core", "command": "echo legend-5" },
+      { "matcher": "legend-core", "command": "echo legend-6" },
+      { "matcher": "legend-core", "command": "echo legend-7" },
+      { "matcher": "legend-core", "command": "echo legend-8" },
+      { "matcher": "legend-core", "command": "echo legend-9" },
+      { "matcher": "legend-core", "command": "echo legend-10" },
+      { "matcher": "legend-core", "command": "echo legend-11" },
+      { "matcher": "legend-core", "command": "echo legend-12" },
+      { "matcher": "legend-core", "command": "echo legend-13" },
+      { "matcher": "legend-core", "command": "echo legend-14" },
+      { "matcher": "legend-core", "command": "echo legend-15" },
+      { "matcher": "legend-core", "command": "echo legend-16" },
+      { "matcher": "legend-core", "command": "echo legend-17" },
+      { "matcher": "legend-core", "command": "echo legend-18" },
+      { "matcher": "legend-core", "command": "echo legend-19" },
+      { "matcher": "legend-core", "command": "echo legend-20" },
+      { "matcher": "legend-core", "command": "echo legend-21" },
+      { "matcher": "legend-core", "command": "echo legend-22" },
+      { "matcher": "legend-core", "command": "echo legend-23" },
+      { "matcher": "legend-core", "command": "echo legend-24" },
+      { "matcher": "legend-core", "command": "echo legend-25" },
+      { "matcher": "legend-core", "command": "echo legend-26" },
+      { "matcher": "legend-core", "command": "echo legend-27" },
+      { "matcher": "legend-core", "command": "echo legend-28" },
+      { "matcher": "legend-core", "command": "echo legend-29" },
+      { "matcher": "legend-core", "command": "echo legend-30" },
+      { "matcher": "legend-core", "command": "echo legend-31" },
+      { "matcher": "legend-core", "command": "echo legend-32" }
+    ],
+    "PostToolUse": [
+      { "matcher": "toolsmith-forge", "command": "echo forge-post" },
+      { "matcher": "aegis-bastion", "command": "echo bastion-post" }
+    ],
+    "Stop": [
+      { "command": "echo stop-all" }
+    ]
+  }
+}

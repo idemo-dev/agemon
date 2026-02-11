@@ -1,5 +1,8 @@
 import type { AgemonProfile, SpriteDefinition } from "../engine/types.js";
-import { PALETTE } from "./palette.js";
+import { generateSpritePalette } from "./palette.js";
+import { buildVisualGenome } from "./genome.js";
+import { resolveDesignedGenome } from "./designer-agent.js";
+import { validateSpriteAsset } from "./sprite-asset.js";
 import { selectParts, STAGE_SIZES } from "./parts.js";
 
 /**
@@ -7,15 +10,30 @@ import { selectParts, STAGE_SIZES } from "./parts.js";
  * Deterministic: same profile → same sprite.
  */
 export function generateSprite(profile: AgemonProfile): SpriteDefinition {
+  const expectedSize = STAGE_SIZES[profile.evolution.stage];
+  if (profile.spriteAsset) {
+    const validation = validateSpriteAsset(profile.spriteAsset, expectedSize);
+    if (validation.ok && validation.asset) {
+      return validation.asset;
+    }
+  }
+
+  return generateProceduralSprite(profile);
+}
+
+export function generateProceduralSprite(profile: AgemonProfile): SpriteDefinition {
   const stage = profile.evolution.stage;
   const size = STAGE_SIZES[stage];
-  const layers = selectParts(profile.stats, profile.types, stage);
+  const baseGenome = buildVisualGenome(profile);
+  const designed = resolveDesignedGenome(profile, baseGenome);
+  const layers = selectParts(profile, designed.genome);
+  const palette = generateSpritePalette(profile, designed.genome);
 
   return {
     width: size,
     height: size,
     layers,
-    palette: PALETTE,
+    palette,
   };
 }
 
@@ -64,6 +82,6 @@ export function generateMiniSprite(profile: AgemonProfile): SpriteDefinition {
     width: miniSize,
     height: miniSize,
     layers: [{ name: "mini", pixels: miniPixels, offsetX: 0, offsetY: 0 }],
-    palette: PALETTE,
+    palette: fullSprite.palette,
   };
 }

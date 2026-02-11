@@ -42,6 +42,20 @@
 - [x] `src/pixel/sprite-generator.ts` — Deterministic sprite generation
 - [x] `src/pixel/renderer.ts` — Browser Canvas 2D API with pixelated rendering
 - [x] `src/pixel/animation.ts` — 3-frame idle bounce animation
+- [x] `src/pixel/visual-spec.ts` + `src/pixel/designer-agent.ts`
+  - DesignerAgent prompt template (abstract role, no named IP)
+  - VisualSpec schema validation + fallback to baseline deterministic genome
+  - Reproducibility cache key: `profileHash + seed + modelVersion`
+  - Palette/composition tuning wired into generator pipeline
+- [x] Optional LLM Designer hydration (`src/cli/designer-llm.ts`)
+  - Runs at scan/build time (not per-frame render), then stores `profile.visualSpec`
+  - OpenAI-compatible Chat Completions JSON response integration
+  - On-disk cache: `.agemon/designer-spec-cache.json`
+- [x] Concept-driven variation + portfolio diversity filter
+  - `VisualSpec` extended with `bodyPlan`, `motifParts`, `brief` (DesignBrief)
+  - `parts.ts` applies body-plan geometry and motif layers (crest/antenna/mantle/etc.)
+  - Similarity scoring (`calculateSpecDistance`) + quality scoring + deterministic mutation retry
+  - Enforced diversity across a trainer party before assigning final `profile.visualSpec`
 - [x] Tests: sprite-generator (10)
 
 ## Phase 5: Web UI Dashboard `cc:DONE`

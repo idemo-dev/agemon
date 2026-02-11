@@ -31,6 +31,9 @@ coverage/
 tmp/
 .cache/
 
+# Agemon cache (LLM-generated specs, sprite cache)
+.agemon/
+
 # Claude Code internal state (session-specific, not project code)
 .claude/logs/
 .claude/memory/

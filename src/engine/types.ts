@@ -146,6 +146,50 @@ export interface Move {
   scope: AgemonScope;
 }
 
+// ─── Optional visual design payload ───
+
+export interface StoredVisualSpec {
+  version: string;
+  modelVersion: string;
+  designSeed: number;
+  bodyPlan?: string;
+  motifParts?: string[];
+  brief?: {
+    creatureCore?: string;
+    combatRole?: string;
+    temperament?: string;
+    signatureFeature?: string;
+  };
+  archetype?: string;
+  silhouette?: number;
+  eyeStyle?: number;
+  mouthStyle?: number;
+  hornStyle?: number;
+  patternStyle?: number;
+  weaponStyle?: number;
+  auraStyle?: number;
+  poseOffset?: number;
+  handedness?: number;
+  armorLevel?: number;
+  patternDensity?: number;
+  paletteBias?: Record<string, unknown>;
+  composition?: Record<string, unknown>;
+}
+
+export interface StoredSpriteAsset {
+  width: number;
+  height: number;
+  layers: Array<{
+    name: string;
+    pixels: number[][];
+    offsetX: number;
+    offsetY: number;
+  }>;
+  palette: string[];
+  modelVersion?: string;
+  qualityScore?: number;
+}
+
 // ─── Agemon Profile (fully computed) ───
 
 export interface AgemonProfile {
@@ -161,6 +205,8 @@ export interface AgemonProfile {
   evolution: EvolutionInfo;
   moves: Move[];
   equipment: McpServerInfo[]; // MCP servers used by this agemon
+  visualSpec?: StoredVisualSpec; // optional designer-generated spec
+  spriteAsset?: StoredSpriteAsset; // optional LLM-generated sprite asset
 }
 
 // ─── Trainer Profile ───

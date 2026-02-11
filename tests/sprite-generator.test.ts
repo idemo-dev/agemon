@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { generateSprite, generateMiniSprite } from "../src/pixel/sprite-generator.js";
-import { PALETTE } from "../src/pixel/palette.js";
+import { PALETTE, PIXEL_INDEX } from "../src/pixel/palette.js";
+import { buildVisualGenome } from "../src/pixel/genome.js";
 import type { AgemonProfile, EvolutionStage } from "../src/engine/types.js";
 
 function makeProfile(
@@ -38,6 +39,28 @@ function makeProfile(
 }
 
 describe("generateSprite", () => {
+  it("uses embedded spriteAsset when valid", () => {
+    const profile = makeProfile("baby", {
+      spriteAsset: makeSpriteAsset(24, PIXEL_INDEX.accent),
+    });
+    const sprite = generateSprite(profile);
+    expect(sprite.width).toBe(24);
+    expect(sprite.height).toBe(24);
+    expect(sprite.layers).toHaveLength(1);
+    expect(sprite.layers[0].name).toBe("body");
+    expect(sprite.layers[0].pixels[7][9]).toBe(PIXEL_INDEX.accent);
+  });
+
+  it("falls back to procedural sprite when spriteAsset is invalid", () => {
+    const profile = makeProfile("baby", {
+      spriteAsset: makeSpriteAsset(32, PIXEL_INDEX.accent),
+    });
+    const sprite = generateSprite(profile);
+    expect(sprite.width).toBe(24);
+    expect(sprite.height).toBe(24);
+    expect(sprite.layers.some((layer) => layer.name === "body")).toBe(true);
+  });
+
   it("generates 24x24 sprite for baby stage", () => {
     const sprite = generateSprite(makeProfile("baby"));
     expect(sprite.width).toBe(24);
@@ -65,9 +88,24 @@ describe("generateSprite", () => {
     expect(layerNames).toContain("aura");
   });
 
-  it("uses the shared palette", () => {
+  it("generates a valid per-agent palette", () => {
     const sprite = generateSprite(makeProfile());
-    expect(sprite.palette).toEqual(PALETTE);
+    expect(sprite.palette).toHaveLength(PALETTE.length);
+    expect(sprite.palette[PIXEL_INDEX.transparent]).toBe("transparent");
+    expect(sprite.palette[PIXEL_INDEX.baseMid]).toMatch(/^#[0-9a-fA-F]{6}$/);
+    expect(sprite.palette[PIXEL_INDEX.accent]).toMatch(/^#[0-9a-fA-F]{6}$/);
+  });
+
+  it("generates different palettes for different agent identities", () => {
+    const a = generateSprite(makeProfile());
+    const b = generateSprite(
+      makeProfile("baby", {
+        id: "cmd:legend",
+        name: "legend-core",
+        displayName: "LegendRex",
+      }),
+    );
+    expect(a.palette).not.toEqual(b.palette);
   });
 
   it("is deterministic — same input gives same output", () => {
@@ -75,6 +113,22 @@ describe("generateSprite", () => {
     const s1 = generateSprite(profile);
     const s2 = generateSprite(profile);
     expect(s1.layers[0].pixels).toEqual(s2.layers[0].pixels);
+  });
+
+  it("generates different visuals for different agent identities", () => {
+    const base = makeProfile("child");
+    const a = generateSprite(base);
+    const b = generateSprite(
+      makeProfile("child", {
+        id: "cmd:deploy",
+        name: "deploy",
+        displayName: "DeployMon",
+      }),
+    );
+
+    expect(a.layers.map((layer) => layer.pixels)).not.toEqual(
+      b.layers.map((layer) => layer.pixels),
+    );
   });
 
   it("all pixel values are valid palette indices", () => {
@@ -112,6 +166,111 @@ describe("generateSprite", () => {
     const sprite = generateSprite(profile);
     const layerNames = sprite.layers.map((l) => l.name);
     expect(layerNames).toContain("weapon");
+
+    const weaponLayer = sprite.layers.find((layer) => layer.name === "weapon");
+    expect(weaponLayer).toBeDefined();
+    if (!weaponLayer) return;
+
+    const weaponPixels = weaponLayer.pixels.flatMap((row) => row);
+    const visibleCount = weaponPixels.filter((px) => px !== PIXEL_INDEX.transparent).length;
+    expect(visibleCount).toBeGreaterThan(24);
+
+    const brightWeaponCount = weaponPixels.filter(
+      (px) => px === PIXEL_INDEX.spot || px === PIXEL_INDEX.spotLight || px === PIXEL_INDEX.highlight,
+    ).length;
+    expect(brightWeaponCount).toBeGreaterThanOrEqual(3);
+  });
+
+  it("uses visible accent colors, not only base body colors", () => {
+    const sprite = generateSprite(
+      makeProfile("child", {
+        id: "cmd:toolsmith",
+        name: "toolsmith-forge",
+        displayName: "ToolsmKin",
+        stats: {
+          knowledge: 30,
+          arsenal: 72,
+          reflex: 35,
+          mastery: 78,
+          guard: 24,
+          synergy: 45,
+        },
+      }),
+    );
+
+    const allPixels = sprite.layers.flatMap((layer) =>
+      layer.pixels.flatMap((row) => row),
+    );
+    const visible = allPixels.filter((px) => px !== PIXEL_INDEX.transparent);
+    const accentIndexes = new Set<number>([
+      PIXEL_INDEX.accent,
+      PIXEL_INDEX.accentLight,
+      PIXEL_INDEX.accentDark,
+      PIXEL_INDEX.spot,
+      PIXEL_INDEX.spotLight,
+      PIXEL_INDEX.rune,
+      PIXEL_INDEX.runeLight,
+    ]);
+    const accentPx = visible.filter((px) => accentIndexes.has(px));
+
+    const ratio = accentPx.length / Math.max(1, visible.length);
+    expect(ratio).toBeGreaterThan(0.06);
+  });
+
+  it("has archetype diversity across different agent seeds", () => {
+    const archetypes = new Set<string>();
+
+    for (let i = 0; i < 20; i++) {
+      const profile = makeProfile("child", {
+        id: `cmd:seed-${i}`,
+        name: `seed-${i}`,
+        displayName: `Seed${i}Mon`,
+      });
+      archetypes.add(buildVisualGenome(profile).archetype);
+    }
+
+    expect(archetypes.size).toBeGreaterThanOrEqual(4);
+  });
+
+  it("applies asymmetric 3/4 pose composition", () => {
+    const sprite = generateSprite(
+      makeProfile("adult", {
+        id: "cmd:pose-probe",
+        name: "pose-probe",
+        displayName: "PoseProbeMon",
+      }),
+    );
+
+    const width = sprite.width;
+    const height = sprite.height;
+    const composite: number[][] = Array.from({ length: height }, () =>
+      Array(width).fill(PIXEL_INDEX.transparent),
+    );
+
+    for (const layer of sprite.layers) {
+      for (let y = 0; y < layer.pixels.length; y++) {
+        for (let x = 0; x < (layer.pixels[y]?.length ?? 0); x++) {
+          const px = layer.pixels[y][x];
+          if (px === PIXEL_INDEX.transparent) continue;
+          const gx = x + layer.offsetX;
+          const gy = y + layer.offsetY;
+          if (gx >= 0 && gx < width && gy >= 0 && gy < height) {
+            composite[gy][gx] = px;
+          }
+        }
+      }
+    }
+
+    let mirrorDiff = 0;
+    for (let y = 0; y < height; y++) {
+      for (let x = 0; x < Math.floor(width / 2); x++) {
+        const left = composite[y][x];
+        const right = composite[y][width - 1 - x];
+        if (left !== right) mirrorDiff++;
+      }
+    }
+
+    expect(mirrorDiff).toBeGreaterThan(30);
   });
 });
 
@@ -135,3 +294,32 @@ describe("generateMiniSprite", () => {
     }
   });
 });
+
+function makeSpriteAsset(size: number, color: number) {
+  const palette = [...PALETTE];
+  const pixels = Array.from({ length: size }, (_, y) =>
+    Array.from({ length: size }, (_, x) => {
+      if (x >= 7 && x <= 14 && y >= 5 && y <= 16) {
+        return color;
+      }
+      if (x === 15 && y >= 8 && y <= 12) {
+        return PIXEL_INDEX.highlight;
+      }
+      return PIXEL_INDEX.transparent;
+    }),
+  );
+
+  return {
+    width: size,
+    height: size,
+    palette,
+    layers: [
+      {
+        name: "body",
+        offsetX: 0,
+        offsetY: 0,
+        pixels,
+      },
+    ],
+  };
+}

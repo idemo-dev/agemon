@@ -7,6 +7,10 @@ import { scanHooks } from "./scanners/hooks.js";
 import { scanPermissions, scanGitHistory } from "./scanners/common.js";
 import { buildAllProfiles } from "../engine/profile-builder.js";
 import { buildTrainerProfile } from "../engine/trainer.js";
+import { hydrateProfilesWithLlmDesigner } from "./designer-llm.js";
+import type { LlmHydrationResult } from "./designer-llm.js";
+import { hydrateProfilesWithLlmSprites } from "./sprite-llm.js";
+import type { LlmSpriteHydrationResult } from "./sprite-llm.js";
 
 /**
  * Orchestrate all scanners and produce a unified AgemonScanResult.
@@ -45,6 +49,15 @@ export async function scan(projectPath?: string): Promise<AgemonScanResult> {
 export async function scanAndBuild(projectPath?: string): Promise<DashboardData> {
   const scanResult = await scan(projectPath);
   const profiles = buildAllProfiles(scanResult);
+  const designerHydration = await hydrateProfilesWithLlmDesigner(
+    profiles,
+    scanResult.projectPath,
+  );
+  const spriteHydration = await hydrateProfilesWithLlmSprites(
+    profiles,
+    scanResult.projectPath,
+  );
+  maybeLogLlmHydration(designerHydration, spriteHydration);
   const trainer = await buildTrainerProfile(profiles);
 
   return {
@@ -52,4 +65,30 @@ export async function scanAndBuild(projectPath?: string): Promise<DashboardData>
     scan: scanResult,
     generatedAt: new Date().toISOString(),
   };
+}
+
+function maybeLogLlmHydration(
+  designer: LlmHydrationResult,
+  sprite: LlmSpriteHydrationResult,
+): void {
+  const trace = process.env.AGEMON_LLM_TRACE === "1";
+
+  if (
+    sprite.mode === "llm" &&
+    sprite.applied === 0 &&
+    sprite.skipped > 0
+  ) {
+    console.warn(
+      "  [Agemon] Sprite LLM mode is enabled but skipped (missing API key or fetch unavailable).",
+    );
+  }
+
+  if (!trace) return;
+
+  console.log(
+    `  [Agemon][designer] provider=${designer.provider} model=${designer.model} requested=${designer.requested} cached=${designer.cached} applied=${designer.applied} failed=${designer.failed}`,
+  );
+  console.log(
+    `  [Agemon][sprite] mode=${sprite.mode} provider=${sprite.provider} model=${sprite.model} requested=${sprite.requested} cached=${sprite.cached} applied=${sprite.applied} failed=${sprite.failed} skipped=${sprite.skipped}`,
+  );
 }

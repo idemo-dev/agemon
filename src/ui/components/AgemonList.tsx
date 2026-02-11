@@ -50,7 +50,16 @@ export function AgemonList({ agemon, scope, onSelect }: AgemonListProps) {
             (e.currentTarget.style.background = "var(--bg-card, #fff)")
           }
         >
-          <div style={{ width: "48px", height: "48px", flexShrink: 0 }}>
+          <div
+            style={{
+              width: "64px",
+              height: "64px",
+              flexShrink: 0,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
             <PixelMonster profile={profile} size="mini" />
           </div>
 

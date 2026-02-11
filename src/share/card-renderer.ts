@@ -1,5 +1,4 @@
 import type { AgemonProfile, TrainerProfile } from "../engine/types.js";
-import { PALETTE } from "../pixel/palette.js";
 import { generateSprite, generateMiniSprite } from "../pixel/sprite-generator.js";
 import { getTypeLabel, TYPE_COLORS } from "../engine/type-system.js";
 
@@ -67,7 +66,7 @@ export async function renderTrainerCard(
           for (let x = 0; x < (layer.pixels[y]?.length ?? 0); x++) {
             const colorIdx = layer.pixels[y][x];
             if (colorIdx === 0) continue;
-            const color = PALETTE[colorIdx];
+            const color = sprite.palette[colorIdx];
             if (!color || color === "transparent") continue;
             ctx.fillStyle = color;
             ctx.fillRect(
@@ -153,7 +152,7 @@ export async function renderAgemonCard(
         for (let x = 0; x < (layer.pixels[y]?.length ?? 0); x++) {
           const colorIdx = layer.pixels[y][x];
           if (colorIdx === 0) continue;
-          const color = PALETTE[colorIdx];
+          const color = sprite.palette[colorIdx];
           if (!color || color === "transparent") continue;
           ctx.fillStyle = color;
           ctx.fillRect(

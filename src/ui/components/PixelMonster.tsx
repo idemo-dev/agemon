@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import type { AgemonProfile } from "../../engine/types.js";
 import { generateSprite } from "../../pixel/sprite-generator.js";
 import { renderToCanvas } from "../../pixel/renderer.js";
@@ -12,6 +12,10 @@ interface PixelMonsterProps {
 export function PixelMonster({ profile, size = "full" }: PixelMonsterProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animRef = useRef<number>(0);
+  const [display, setDisplay] = useState<{ width: number; height: number }>({
+    width: 0,
+    height: 0,
+  });
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -19,7 +23,12 @@ export function PixelMonster({ profile, size = "full" }: PixelMonsterProps) {
 
     const baseSprite = generateSprite(profile);
     const frames = generateIdleFrames(baseSprite);
-    const scale = size === "mini" ? 4 : 8;
+    const targetDisplay = size === "mini" ? 64 : 160;
+    const scale = Math.max(1, Math.floor(targetDisplay / baseSprite.width));
+    setDisplay({
+      width: baseSprite.width * scale,
+      height: baseSprite.height * scale,
+    });
 
     function animate() {
       const frameIdx = getCurrentFrame(frames.length);
@@ -34,15 +43,16 @@ export function PixelMonster({ profile, size = "full" }: PixelMonsterProps) {
     };
   }, [profile, size]);
 
-  const displaySize = size === "mini" ? 64 : undefined;
-
   return (
     <canvas
       ref={canvasRef}
       style={{
         imageRendering: "pixelated",
-        maxWidth: displaySize ? `${displaySize}px` : "100%",
-        maxHeight: displaySize ? `${displaySize}px` : "100%",
+        width: display.width > 0 ? `${display.width}px` : undefined,
+        height: display.height > 0 ? `${display.height}px` : undefined,
+        display: "block",
+        flexShrink: 0,
+        margin: "0 auto",
       }}
     />
   );
