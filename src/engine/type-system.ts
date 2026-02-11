@@ -9,6 +9,24 @@ const STAT_TO_TYPE: Record<StatName, AgemonType> = {
   synergy: "catalyst",
 };
 
+export const TYPE_DISPLAY_LABELS: Record<AgemonType, string> = {
+  scholar: "Knowledge",
+  arsenal: "Arsenal",
+  sentinel: "Reflex",
+  artisan: "Mastery",
+  guardian: "Guard",
+  catalyst: "Synergy",
+};
+
+export const STAT_EMOJI: Record<StatName, string> = {
+  knowledge: "\u{1F4D6}",
+  arsenal: "\u2694",
+  reflex: "\u26A1",
+  mastery: "\u{1F3A8}",
+  guard: "\u{1F6E1}",
+  synergy: "\u{1F517}",
+};
+
 export const TYPE_COLORS: Record<AgemonType, { primary: string; secondary: string }> = {
   scholar: { primary: "#4A90D9", secondary: "#7CB3E8" },
   arsenal: { primary: "#E74C3C", secondary: "#F1948A" },

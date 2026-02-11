@@ -838,6 +838,7 @@ async function requestProviderVisualSpec(
     const requestBody: Record<string, unknown> = {
       model: config.model,
       temperature: 0.2,
+      max_tokens: 4096,
       messages: [
         { role: "system", content: prompt.system },
         {

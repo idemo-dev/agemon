@@ -371,6 +371,7 @@ async function requestProviderSpriteAsset(
     const requestBody: Record<string, unknown> = {
       model: config.model,
       temperature: 0.45,
+      max_tokens: 4096,
       messages: [
         { role: "system", content: prompt.system },
         {

@@ -1,4 +1,5 @@
-import type { AgemonStats, AgemonType } from "../../engine/types.js";
+import type { AgemonStats, AgemonType, StatName } from "../../engine/types.js";
+import { STAT_EMOJI } from "../../engine/type-system.js";
 
 interface RadarChartProps {
   stats: AgemonStats;
@@ -6,13 +7,13 @@ interface RadarChartProps {
   size?: number;
 }
 
-const STAT_LABELS: { key: keyof AgemonStats; label: string }[] = [
-  { key: "knowledge", label: "KNW" },
-  { key: "arsenal", label: "ARS" },
-  { key: "reflex", label: "RFX" },
-  { key: "mastery", label: "MST" },
-  { key: "guard", label: "GRD" },
-  { key: "synergy", label: "SYN" },
+const STAT_KEYS: (keyof AgemonStats)[] = [
+  "knowledge",
+  "arsenal",
+  "reflex",
+  "mastery",
+  "guard",
+  "synergy",
 ];
 
 const TYPE_COLORS: Record<AgemonType, string> = {
@@ -43,7 +44,7 @@ export function RadarChart({ stats, types, size = 200 }: RadarChartProps) {
   }
 
   // Build stat polygon points
-  const statValues = STAT_LABELS.map((s) => stats[s.key]);
+  const statValues = STAT_KEYS.map((key) => stats[key]);
   const points = statValues
     .map((val, i) => getPoint(i, val))
     .map(([x, y]) => `${x},${y}`)
@@ -69,7 +70,7 @@ export function RadarChart({ stats, types, size = 200 }: RadarChartProps) {
       })}
 
       {/* Axes */}
-      {STAT_LABELS.map((_, i) => {
+      {STAT_KEYS.map((_, i) => {
         const [x, y] = getPoint(i, 100);
         return (
           <line
@@ -99,21 +100,23 @@ export function RadarChart({ stats, types, size = 200 }: RadarChartProps) {
         return <circle key={i} cx={x} cy={y} r={3} fill={color} />;
       })}
 
-      {/* Labels */}
-      {STAT_LABELS.map(({ label }, i) => {
-        const [x, y] = getPoint(i, 120);
+      {/* Labels: emoji + value */}
+      {STAT_KEYS.map((key, i) => {
+        const [x, y] = getPoint(i, 125);
+        const emoji = STAT_EMOJI[key as StatName];
+        const value = stats[key];
         return (
           <text
-            key={label}
+            key={key}
             x={x}
             y={y}
             textAnchor="middle"
             dominantBaseline="central"
-            fontSize={10}
+            fontSize={11}
             fontFamily="var(--font-mono, monospace)"
             fill="var(--text-secondary, #636e72)"
           >
-            {label}
+            {emoji} {value}
           </text>
         );
       })}

@@ -22,7 +22,7 @@ export function startServer(
     });
 
     // Serve static UI files (built by Vite)
-    const uiDistPath = join(__dirname, "..", "..", "ui");
+    const uiDistPath = join(__dirname, "..", "ui");
     access(uiDistPath)
       .then(() => {
         app.use(express.static(uiDistPath));
