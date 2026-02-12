@@ -98,10 +98,10 @@ export function AgemonList({ agemon, projectName, onSelect }: AgemonListProps) {
                 position: "absolute",
                 top: "8px",
                 right: "8px",
-                fontFamily: "var(--font-mono, monospace)",
-                fontSize: "11px",
+                fontFamily: "var(--font-pixel, monospace)",
+                fontSize: "12px",
                 fontWeight: 700,
-                color: "var(--text-secondary, #636e72)",
+                color: "var(--text-secondary, #4a5568)",
               }}
             >
               Lv.{profile.level}
@@ -128,7 +128,10 @@ export function AgemonList({ agemon, projectName, onSelect }: AgemonListProps) {
                 fontSize: "13px",
                 color: "var(--text-primary, #1a1a2e)",
                 textAlign: "center",
-                marginBottom: "4px",
+                marginBottom: "6px",
+                fontFamily: "var(--font-pixel, monospace)",
+                lineHeight: "1.6",
+                letterSpacing: "1px",
               }}
             >
               {profile.displayName}
@@ -142,10 +145,12 @@ export function AgemonList({ agemon, projectName, onSelect }: AgemonListProps) {
                   style={{
                     background: TYPE_COLORS[type],
                     color: "#fff",
-                    padding: "1px 6px",
+                    padding: "3px 8px",
                     borderRadius: "3px",
-                    fontSize: "9px",
+                    fontSize: "11px",
                     fontWeight: "bold",
+                    fontFamily: "var(--font-pixel, monospace)",
+                    letterSpacing: "1px",
                   }}
                 >
                   {getTypeLabel(type)}

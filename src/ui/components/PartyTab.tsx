@@ -29,12 +29,13 @@ export function PartyTab({ data, onSelectAgemon }: PartyTabProps) {
       <section>
         <h3
           style={{
-            fontSize: "12px",
+            fontSize: "13px",
             fontWeight: 700,
             textTransform: "uppercase",
-            letterSpacing: "0.5px",
+            letterSpacing: "2px",
             color: "var(--text-muted, #9e9eae)",
-            marginBottom: "8px",
+            marginBottom: "12px",
+            fontFamily: "var(--font-pixel, monospace)",
           }}
         >
           Party ({allAgemon.length})

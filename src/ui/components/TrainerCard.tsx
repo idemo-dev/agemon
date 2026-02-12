@@ -82,15 +82,20 @@ export function TrainerCard({ trainer }: TrainerCardProps) {
               fontSize: "18px",
               fontWeight: 700,
               color: "var(--text-primary, #1a1a2e)",
+              fontFamily: "var(--font-pixel, monospace)",
+              letterSpacing: "2px",
             }}
           >
             {trainer.name}
           </h2>
           <div
             style={{
-              fontSize: "13px",
-              color: "var(--text-secondary, #636e72)",
-              fontFamily: "var(--font-mono, monospace)",
+              fontSize: "14px",
+              color: "var(--text-secondary, #4a5568)",
+              fontFamily: "var(--font-pixel, monospace)",
+              fontWeight: 700,
+              letterSpacing: "1px",
+              marginTop: "4px",
             }}
           >
             Lv.{trainer.level}
@@ -132,14 +137,15 @@ export function TrainerCard({ trainer }: TrainerCardProps) {
         <div style={{ marginTop: "14px" }}>
           <div
             style={{
-              fontSize: "10px",
-              color: "var(--text-muted, #9e9eae)",
+              fontSize: "11px",
+              color: "var(--text-muted, #718096)",
               textTransform: "uppercase",
-              letterSpacing: "0.5px",
-              marginBottom: "6px",
+              letterSpacing: "2px",
+              marginBottom: "8px",
+              fontFamily: "var(--font-pixel, monospace)",
             }}
           >
-            Type Spectrum
+            TYPE SPECTRUM
           </div>
           <div
             style={{
@@ -213,20 +219,22 @@ function StatBadge({ label, value }: { label: string; value: number }) {
     >
       <div
         style={{
-          fontSize: "20px",
+          fontSize: "22px",
           fontWeight: 700,
           color: "var(--text-primary, #1a1a2e)",
-          fontFamily: "var(--font-mono, monospace)",
+          fontFamily: "var(--font-pixel, monospace)",
         }}
       >
         {value}
       </div>
       <div
         style={{
-          fontSize: "10px",
-          color: "var(--text-muted, #9e9eae)",
+          fontSize: "11px",
+          color: "var(--text-muted, #718096)",
           textTransform: "uppercase",
-          letterSpacing: "0.5px",
+          letterSpacing: "2px",
+          fontFamily: "var(--font-pixel, monospace)",
+          marginTop: "4px",
         }}
       >
         {label}

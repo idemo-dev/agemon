@@ -11,8 +11,8 @@
 
   /* Text */
   --text-primary: #1a1a2e;
-  --text-secondary: #636e72;
-  --text-muted: #9e9eae;
+  --text-secondary: #4a5568;
+  --text-muted: #718096;
 
   /* Brand */
   --color-brand: #e74c3c;
@@ -34,4 +34,5 @@
 
   /* Font */
   --font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  --font-pixel: '8bit Operator+', monospace;
 }

@@ -89,10 +89,11 @@ export function AgemonDetail({ profile, onBack }: AgemonDetailProps) {
           borderRadius: "var(--border-radius, 6px)",
           padding: "6px 12px",
           cursor: "pointer",
-          fontSize: "12px",
-          color: "var(--text-secondary, #636e72)",
-          fontFamily: "var(--font-mono, monospace)",
+          fontSize: "11px",
+          color: "var(--text-secondary, #4a5568)",
+          fontFamily: "var(--font-pixel, monospace)",
           transition: "all 0.15s",
+          letterSpacing: "1px",
         }}
       >
         {"\u2190"} Back
@@ -119,9 +120,12 @@ export function AgemonDetail({ profile, onBack }: AgemonDetailProps) {
           <h2
             style={{
               margin: 0,
-              fontSize: "22px",
+              fontSize: "20px",
               fontWeight: 700,
               color: "var(--text-primary, #1a1a2e)",
+              fontFamily: "var(--font-pixel, monospace)",
+              lineHeight: "1.4",
+              letterSpacing: "2px",
             }}
           >
             {profile.displayName}
@@ -130,11 +134,11 @@ export function AgemonDetail({ profile, onBack }: AgemonDetailProps) {
             style={{
               background: "var(--color-brand, #e74c3c)",
               color: "#fff",
-              padding: "3px 10px",
+              padding: "5px 12px",
               borderRadius: "12px",
-              fontSize: "12px",
+              fontSize: "13px",
               fontWeight: 700,
-              fontFamily: "var(--font-mono, monospace)",
+              fontFamily: "var(--font-pixel, monospace)",
             }}
           >
             Lv.{profile.level}
@@ -155,11 +159,12 @@ export function AgemonDetail({ profile, onBack }: AgemonDetailProps) {
               background:
                 profile.source === "command" ? "#2c3e50" : "#27ae60",
               color: "#fff",
-              padding: "1px 6px",
+              padding: "3px 8px",
               borderRadius: "3px",
               fontSize: "10px",
               fontWeight: "bold",
-              fontFamily: "var(--font-mono, monospace)",
+              fontFamily: "var(--font-pixel, monospace)",
+              letterSpacing: "1px",
             }}
           >
             {profile.source === "command" ? "CMD" : "MCP"}
@@ -195,10 +200,12 @@ export function AgemonDetail({ profile, onBack }: AgemonDetailProps) {
                   border: `1.5px solid ${color}`,
                   color: color,
                   background: "transparent",
-                  padding: "2px 10px",
+                  padding: "4px 12px",
                   borderRadius: "12px",
                   fontSize: "11px",
                   fontWeight: 700,
+                  fontFamily: "var(--font-pixel, monospace)",
+                  letterSpacing: "1px",
                 }}
               >
                 {getTypeLabel(type)}
@@ -287,9 +294,11 @@ export function AgemonDetail({ profile, onBack }: AgemonDetailProps) {
         <h3
           style={{
             margin: "0 0 12px 0",
-            fontSize: "15px",
+            fontSize: "12px",
             fontWeight: 700,
             color: "var(--text-primary, #1a1a2e)",
+            fontFamily: "var(--font-pixel, monospace)",
+            letterSpacing: "2px",
           }}
         >
           {"\u{1F4C8}"} EVOLUTION PATH
@@ -310,9 +319,11 @@ export function AgemonDetail({ profile, onBack }: AgemonDetailProps) {
           <h3
             style={{
               margin: "0 0 12px 0",
-              fontSize: "15px",
+              fontSize: "12px",
               fontWeight: 700,
               color: "var(--text-primary, #1a1a2e)",
+              fontFamily: "var(--font-pixel, monospace)",
+              letterSpacing: "1px",
             }}
           >
             {"\u{1F527}"} EQUIPMENT ({profile.equipment.length})
@@ -361,9 +372,11 @@ export function AgemonDetail({ profile, onBack }: AgemonDetailProps) {
           <h3
             style={{
               margin: 0,
-              fontSize: "15px",
+              fontSize: "12px",
               fontWeight: 700,
               color: "var(--text-primary, #1a1a2e)",
+              fontFamily: "var(--font-pixel, monospace)",
+              letterSpacing: "1px",
             }}
           >
             {"\u2694"} MOVES ({profile.moves.length})

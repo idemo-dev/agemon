@@ -48,9 +48,10 @@ export function Evolution({ evolution }: EvolutionProps) {
               <span style={{ fontSize: "16px" }}>{emoji}</span>
               <span
                 style={{
-                  fontSize: "9px",
+                  fontSize: "11px",
                   fontWeight: isCurrent ? 700 : 400,
-                  fontFamily: "var(--font-mono, monospace)",
+                  fontFamily: "var(--font-pixel, monospace)",
+                  letterSpacing: "1px",
                   color: isCurrent
                     ? "var(--color-brand, #e74c3c)"
                     : isPast

@@ -69,7 +69,10 @@ export function MoveCard({ move, count = 1 }: MoveCardProps) {
             fontSize: "13px",
             display: "flex",
             alignItems: "center",
-            gap: "6px",
+            gap: "8px",
+            fontFamily: "var(--font-pixel, monospace)",
+            letterSpacing: "1px",
+            lineHeight: "1.6",
           }}
         >
           {move.name}
