@@ -30,6 +30,10 @@ export function calculateAgemonXP(
     xp += Math.min(Math.floor(contentLength / 50), 80); // content depth
   } else if (detected.source === "mcp") {
     xp += 120; // MCP servers are powerful
+  } else if (detected.source === "plugin") {
+    xp += 100; // plugins extend agent capabilities
+  } else if (detected.source === "base") {
+    xp += 60; // base Agemon from CLAUDE.md — modest but present
   }
 
   // Scope bonus
@@ -111,6 +115,12 @@ function calculateArsenal(detected: DetectedAgemon): number {
   if (detected.source === "mcp") {
     return 50; // Base score for MCP (tools discovery adds more in Phase 2)
   }
+  if (detected.source === "plugin") {
+    return 45; // Plugins provide moderate arsenal
+  }
+  if (detected.source === "base") {
+    return 10; // Base Agemon has minimal arsenal (knowledge-focused)
+  }
   // Count tool-like references in command content
   const content = detected.rawContent ?? "";
   const toolPatterns = /\b(tool|mcp|api|server|plugin|extension)\b/gi;
@@ -121,6 +131,12 @@ function calculateArsenal(detected: DetectedAgemon): number {
 function calculateMastery(detected: DetectedAgemon): number {
   if (detected.source === "mcp") {
     return 30; // MCP servers have moderate mastery
+  }
+  if (detected.source === "plugin") {
+    return 35; // Plugins have moderate mastery
+  }
+  if (detected.source === "base") {
+    return 20; // Base Agemon has basic mastery from CLAUDE.md
   }
   const content = detected.rawContent ?? "";
   const lines = content.split("\n").length;

@@ -48,7 +48,7 @@ export type AgemonType =
 
 // ─── Detected Agemon (raw scanner output) ───
 
-export type AgemonSource = "command" | "mcp";
+export type AgemonSource = "command" | "mcp" | "plugin" | "base";
 export type AgemonScope = "global" | "project";
 
 export interface DetectedAgemon {
@@ -97,6 +97,16 @@ export interface McpServerInfo {
   tools?: string[]; // known tool names if discoverable
 }
 
+// ─── Plugins ───
+
+export interface PluginInfo {
+  name: string; // e.g. "claude-code-harness"
+  publisher: string; // e.g. "claude-code-harness-marketplace"
+  fullId: string; // e.g. "claude-code-harness@claude-code-harness-marketplace"
+  enabled: boolean;
+  scope: AgemonScope;
+}
+
 // ─── Permissions ───
 
 export interface PermissionInfo {
@@ -122,6 +132,7 @@ export interface AgemonScanResult {
   hooks: HookInfo[];
   permissions: PermissionInfo[];
   mcpServers: McpServerInfo[];
+  plugins: PluginInfo[];
   gitHistory?: GitHistory;
 }
 
@@ -221,11 +232,35 @@ export interface TrainerProfile {
   projectAgemon: AgemonProfile[];
 }
 
+// ─── Relationships ───
+
+export type RelationshipType = "dependency" | "synergy" | "trigger" | "shared-scope";
+
+export type InteractionKind = "trigger-chain" | "tool-dependency" | "shared-knowledge";
+
+export interface MoveInteraction {
+  fromMoveIndex: number;    // source Agemon's moves[] index
+  toMoveIndex: number;      // target Agemon's moves[] index
+  kind: InteractionKind;
+  description: string;      // e.g. "CodeGuard fires on PreToolUse[deploy] → activates DeployScript"
+  workflowOutcome: string;  // e.g. "Code is validated before deployment executes"
+}
+
+export interface AgemonRelationship {
+  from: string;  // AgemonProfile.id
+  to: string;    // AgemonProfile.id
+  type: RelationshipType;
+  strength: number;  // 0-100
+  reason: string;    // human-readable description
+  interactions: MoveInteraction[];
+}
+
 // ─── Dashboard Data (API response) ───
 
 export interface DashboardData {
   trainer: TrainerProfile;
   scan: AgemonScanResult;
+  relationships: AgemonRelationship[];
   generatedAt: string;
 }
 

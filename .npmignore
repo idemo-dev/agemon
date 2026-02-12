@@ -1,0 +1,28 @@
+# Source
+src/
+tests/
+fixtures/
+
+# Config
+tsconfig.json
+tsup.config.ts
+vite.config.ts
+.eslintrc*
+eslint.config.*
+
+# Dev / CI
+.claude/
+.agemon/
+.env
+.env.*
+.github/
+docs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Misc
+node_modules/
+*.tgz

@@ -133,10 +133,11 @@ function printSummary(dashboard: DashboardData) {
 
   if (allProfiles.length === 0) {
     console.log("|  No Agemon detected.                    |");
-    console.log("|  Add commands or MCP servers to start!  |");
+    console.log("|  Add commands, MCP, or plugins to start!|");
   } else {
     for (const p of allProfiles) {
-      const src = p.source === "command" ? "CMD" : "MCP";
+      const srcLabels: Record<string, string> = { command: "CMD", mcp: "MCP", plugin: "PLG", base: "BASE" };
+      const src = srcLabels[p.source] ?? p.source;
       const scope = p.scope === "global" ? "G" : "P";
       const typeStr = p.types.map(getTypeLabel).join("/");
       console.log(

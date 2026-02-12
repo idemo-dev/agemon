@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import {
   generateCommandMoves,
   generateMcpMoves,
+  generatePluginMoves,
   generateReflexMoves,
   generatePassiveSkills,
   generateGuardMoves,
@@ -85,6 +86,23 @@ describe("generateMcpMoves", () => {
     const fewMoves = generateMcpMoves(few, "project");
     const manyMoves = generateMcpMoves(many, "project");
     expect(manyMoves[0].power).toBeGreaterThan(fewMoves[0].power);
+  });
+});
+
+describe("generatePluginMoves", () => {
+  it("generates support move for plugin", () => {
+    const detected = makeDetected({
+      id: "plugin:feature-dev",
+      name: "feature-dev",
+      source: "plugin",
+      sourceFile: "/test/settings.json",
+    });
+    const moves = generatePluginMoves(detected);
+    expect(moves).toHaveLength(1);
+    expect(moves[0].category).toBe("support");
+    expect(moves[0].type).toBe("arsenal");
+    expect(moves[0].power).toBe(45);
+    expect(moves[0].description).toContain("feature-dev");
   });
 });
 

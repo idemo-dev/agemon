@@ -49,7 +49,7 @@ export function MoveCard({ move, count = 1 }: MoveCardProps) {
         padding: "10px 12px",
         cursor: "pointer",
         background: expanded ? "var(--bg-secondary, #f8f8fa)" : "var(--bg-card, #fff)",
-        transition: "background 0.15s, box-shadow 0.15s",
+        transition: "background 0.2s ease, box-shadow 0.2s ease",
         boxShadow: expanded ? "var(--shadow-md)" : "var(--shadow-sm)",
       }}
     >
@@ -120,7 +120,7 @@ export function MoveCard({ move, count = 1 }: MoveCardProps) {
               fontSize: "11px",
               color: "var(--text-muted, #9e9eae)",
               transform: expanded ? "rotate(180deg)" : "rotate(0deg)",
-              transition: "transform 0.15s",
+              transition: "transform 0.2s ease",
             }}
           >
             {"\u25BC"}
@@ -152,6 +152,7 @@ export function MoveCard({ move, count = 1 }: MoveCardProps) {
             display: "flex",
             flexDirection: "column",
             gap: "6px",
+            animation: "fadeIn 0.2s ease",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>

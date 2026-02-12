@@ -160,7 +160,7 @@ export function SearchTab({ data, onSelectAgemon }: SearchTabProps) {
                 categoryFilter === key
                   ? "#fff"
                   : "var(--text-secondary, #636e72)",
-              transition: "all 0.15s",
+              transition: "all 0.2s ease",
             }}
           >
             {label}
@@ -201,7 +201,7 @@ export function SearchTab({ data, onSelectAgemon }: SearchTabProps) {
               cursor: onSelectAgemon ? "pointer" : "default",
               padding: "4px 8px",
               borderRadius: "4px",
-              transition: "background 0.15s",
+              transition: "background 0.2s ease",
             }}
             onMouseEnter={(e) => {
               if (onSelectAgemon) e.currentTarget.style.background = "var(--bg-hover, #f0f0f5)";

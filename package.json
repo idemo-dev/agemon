@@ -28,8 +28,16 @@
     "gamification",
     "visualization"
   ],
-  "author": "",
+  "author": "shionoryota",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shionoryota/agemon.git"
+  },
+  "homepage": "https://github.com/shionoryota/agemon#readme",
+  "bugs": {
+    "url": "https://github.com/shionoryota/agemon/issues"
+  },
   "engines": {
     "node": ">=18"
   },
@@ -43,11 +51,13 @@
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.18",
+    "@types/d3-force": "^3.0.10",
     "@types/express": "^5.0.6",
     "@types/node": "^25.2.3",
     "@types/react": "^19.2.13",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.4",
+    "d3-force": "^3.0.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "tailwindcss": "^4.1.18",
@@ -55,5 +65,8 @@
     "tsx": "^4.21.0",
     "vite": "^7.3.1",
     "vitest": "^4.0.18"
+  },
+  "optionalDependencies": {
+    "canvas": "^3.2.1"
   }
 }

@@ -28,6 +28,11 @@ export function generateMoves(
     if (server) {
       moves.push(...generateMcpMoves(server, detected.scope));
     }
+  } else if (detected.source === "plugin") {
+    moves.push(...generatePluginMoves(detected));
+  } else if (detected.source === "base") {
+    // Base Agemon gets no primary attack/support moves —
+    // it relies entirely on passive, reflex, and guard moves below
   }
 
   // Reflex moves from related hooks
@@ -93,6 +98,26 @@ export function generateMcpMoves(
   });
 
   return moves;
+}
+
+/**
+ * Generate support moves from a plugin.
+ * Plugins are similar to MCP servers — they extend agent capabilities.
+ */
+export function generatePluginMoves(detected: DetectedAgemon): Move[] {
+  return [
+    {
+      name: generateMoveName(detected.name, "support"),
+      type: "arsenal",
+      category: "support",
+      power: 45,
+      description: `Extend capabilities via ${detected.name} plugin`,
+      source: detected.name,
+      capabilities: [detected.name],
+      status: "active",
+      scope: detected.scope,
+    },
+  ];
 }
 
 /**

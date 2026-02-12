@@ -31,6 +31,7 @@ function makeScanResult(
     hooks: [],
     permissions: [],
     mcpServers: [],
+    plugins: [],
     ...overrides,
   };
 }
@@ -91,6 +92,69 @@ describe("buildAgemonProfile", () => {
     expect(profile.source).toBe("mcp");
     expect(profile.equipment).toHaveLength(1);
     expect(profile.equipment[0].name).toBe("github");
+  });
+
+  it("builds profile for plugin agemon", () => {
+    const scan = makeScanResult({
+      detectedAgemon: [
+        {
+          id: "plugin:feature-dev",
+          name: "feature-dev",
+          source: "plugin",
+          sourceFile: "/test/settings.json",
+          scope: "global",
+        },
+      ],
+    });
+
+    const profile = buildAgemonProfile(scan.detectedAgemon[0], scan);
+
+    expect(profile.source).toBe("plugin");
+    expect(profile.id).toBe("plugin:feature-dev");
+    expect(profile.displayName).toMatch(/(Mon|Dex|Bot|Kin|Rex)$/);
+    expect(profile.xp).toBeGreaterThan(0);
+    expect(profile.moves.length).toBeGreaterThan(0);
+    expect(profile.equipment).toHaveLength(0);
+  });
+
+  it("builds profile for base agemon from CLAUDE.md", () => {
+    const scan = makeScanResult({
+      detectedAgemon: [
+        {
+          id: "base:claude-md",
+          name: "CLAUDE.md",
+          source: "base",
+          sourceFile: "/test/CLAUDE.md",
+          scope: "project",
+          rawContent: "Code Style\nTesting\nSecurity",
+        },
+      ],
+      baseKnowledge: {
+        claudeMd: {
+          exists: true,
+          charCount: 500,
+          sectionCount: 3,
+          sections: ["Code Style", "Testing", "Security"],
+          locations: ["/test/CLAUDE.md"],
+        },
+        agentsMd: {
+          exists: false,
+          charCount: 0,
+          sectionCount: 0,
+          sections: [],
+          locations: [],
+        },
+      },
+    });
+
+    const profile = buildAgemonProfile(scan.detectedAgemon[0], scan);
+
+    expect(profile.source).toBe("base");
+    expect(profile.id).toBe("base:claude-md");
+    expect(profile.xp).toBeGreaterThan(0);
+    // Base Agemon should have passive moves from CLAUDE.md sections
+    const passiveMoves = profile.moves.filter((m) => m.category === "passive");
+    expect(passiveMoves.length).toBeGreaterThan(0);
   });
 
   it("is deterministic — same input gives same output", () => {

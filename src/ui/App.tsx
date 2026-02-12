@@ -2,10 +2,11 @@ import { useState, useEffect } from "react";
 import type { DashboardData, AgemonProfile } from "../engine/types.js";
 import { PartyTab } from "./components/PartyTab.js";
 import { SearchTab } from "./components/SearchTab.js";
+import { SynergyMap } from "./components/SynergyMap.js";
 import { AgemonDetail } from "./components/AgemonDetail.js";
 import "./theme.css";
 
-type Tab = "party" | "search";
+type Tab = "party" | "synergy" | "search";
 type View = { type: "tabs" } | { type: "detail"; profile: AgemonProfile };
 
 export function App() {
@@ -73,6 +74,15 @@ export function App() {
                 PARTY
               </button>
               <button
+                onClick={() => setActiveTab("synergy")}
+                style={{
+                  ...styles.tab,
+                  ...(activeTab === "synergy" ? styles.tabActive : {}),
+                }}
+              >
+                SYNERGY
+              </button>
+              <button
                 onClick={() => setActiveTab("search")}
                 style={{
                   ...styles.tab,
@@ -84,21 +94,36 @@ export function App() {
             </div>
 
             {/* Tab content */}
-            {activeTab === "party" ? (
-              <PartyTab
-                data={data}
-                onSelectAgemon={(profile) =>
-                  setView({ type: "detail", profile })
-                }
-              />
-            ) : (
-              <SearchTab
-                data={data}
-                onSelectAgemon={(profile) =>
-                  setView({ type: "detail", profile })
-                }
-              />
-            )}
+            <div key={activeTab} style={{ animation: "fadeIn 0.2s ease" }}>
+              {activeTab === "party" && (
+                <PartyTab
+                  data={data}
+                  onSelectAgemon={(profile) =>
+                    setView({ type: "detail", profile })
+                  }
+                />
+              )}
+              {activeTab === "synergy" && (
+                <SynergyMap
+                  profiles={[
+                    ...data.trainer.globalAgemon,
+                    ...data.trainer.projectAgemon,
+                  ]}
+                  relationships={data.relationships}
+                  onSelectAgemon={(profile) =>
+                    setView({ type: "detail", profile })
+                  }
+                />
+              )}
+              {activeTab === "search" && (
+                <SearchTab
+                  data={data}
+                  onSelectAgemon={(profile) =>
+                    setView({ type: "detail", profile })
+                  }
+                />
+              )}
+            </div>
           </>
         )}
       </main>
@@ -161,7 +186,7 @@ const styles: Record<string, React.CSSProperties> = {
     color: "var(--text-muted, #9e9eae)",
     borderBottom: "2px solid transparent",
     fontFamily: "var(--font-pixel, monospace)",
-    transition: "color 0.15s, border-color 0.15s",
+    transition: "color 0.2s ease, border-color 0.2s ease",
   },
   tabActive: {
     color: "var(--color-brand, #e74c3c)",

@@ -4,8 +4,7 @@ interface EvolutionProps {
   evolution: EvolutionInfo;
 }
 
-const STAGES: { stage: EvolutionStage | "egg"; label: string; emoji: string }[] = [
-  { stage: "egg", label: "Egg", emoji: "\u{1F95A}" },
+const STAGES: { stage: EvolutionStage; label: string; emoji: string }[] = [
   { stage: "baby", label: "Baby", emoji: "\u{1F423}" },
   { stage: "child", label: "Child", emoji: "\u{1F47E}" },
   { stage: "teen", label: "Teen", emoji: "\u{1F525}" },

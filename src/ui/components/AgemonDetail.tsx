@@ -1,6 +1,13 @@
 import { useState, useMemo } from "react";
-import type { AgemonProfile, MoveCategory } from "../../engine/types.js";
+import type { AgemonProfile, MoveCategory, AgemonSource } from "../../engine/types.js";
 import { getTypeLabel, TYPE_COLORS } from "../../engine/type-system.js";
+
+const SOURCE_BADGE: Record<AgemonSource, { label: string; bg: string }> = {
+  command: { label: "CMD", bg: "#2c3e50" },
+  mcp: { label: "MCP", bg: "#27ae60" },
+  plugin: { label: "PLG", bg: "#8e44ad" },
+  base: { label: "BASE", bg: "#7f8c8d" },
+};
 import { PixelMonster } from "./PixelMonster.js";
 import { RadarChart } from "./RadarChart.js";
 import { MoveList } from "./MoveList.js";
@@ -92,7 +99,7 @@ export function AgemonDetail({ profile, onBack }: AgemonDetailProps) {
           fontSize: "11px",
           color: "var(--text-secondary, #4a5568)",
           fontFamily: "var(--font-pixel, monospace)",
-          transition: "all 0.15s",
+          transition: "all 0.2s ease",
           letterSpacing: "1px",
         }}
       >
@@ -156,8 +163,7 @@ export function AgemonDetail({ profile, onBack }: AgemonDetailProps) {
         >
           <span
             style={{
-              background:
-                profile.source === "command" ? "#2c3e50" : "#27ae60",
+              background: SOURCE_BADGE[profile.source]?.bg ?? "#666",
               color: "#fff",
               padding: "3px 8px",
               borderRadius: "3px",
@@ -167,7 +173,7 @@ export function AgemonDetail({ profile, onBack }: AgemonDetailProps) {
               letterSpacing: "1px",
             }}
           >
-            {profile.source === "command" ? "CMD" : "MCP"}
+            {SOURCE_BADGE[profile.source]?.label ?? profile.source}
           </span>
           <span
             style={{
@@ -463,7 +469,7 @@ function FilterChip({
         border: active ? `1.5px solid ${color}` : "1px solid var(--border-color, #e0e0e8)",
         background: active ? color : "var(--bg-card, #fff)",
         color: active ? "#fff" : "var(--text-secondary, #636e72)",
-        transition: "all 0.15s",
+        transition: "all 0.2s ease",
       }}
     >
       {label}

@@ -47,6 +47,7 @@ export function buildAgemonProfile(
   const types = determineTypes(stats);
 
   // Equipment: MCP servers associated with this agemon
+  // MCP agemon get their own server; plugin/base agemon get no MCP equipment
   const equipment: McpServerInfo[] =
     detected.source === "mcp"
       ? scan.mcpServers.filter((s) => s.name === detected.name)

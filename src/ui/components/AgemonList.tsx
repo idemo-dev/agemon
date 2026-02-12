@@ -1,6 +1,13 @@
-import type { AgemonProfile, AgemonType } from "../../engine/types.js";
+import type { AgemonProfile, AgemonType, AgemonSource } from "../../engine/types.js";
 import { PixelMonster } from "./PixelMonster.js";
 import { getTypeLabel } from "../../engine/type-system.js";
+
+const SOURCE_BADGE: Record<AgemonSource, { label: string; bg: string }> = {
+  command: { label: "CMD", bg: "#2c3e50" },
+  mcp: { label: "MCP", bg: "#27ae60" },
+  plugin: { label: "PLG", bg: "#8e44ad" },
+  base: { label: "BASE", bg: "#7f8c8d" },
+};
 
 interface AgemonListProps {
   agemon: AgemonProfile[];
@@ -58,7 +65,7 @@ export function AgemonList({ agemon, projectName, onSelect }: AgemonListProps) {
               border: "1px solid var(--border-color, #e0e0e8)",
               borderRadius: "var(--border-radius, 6px)",
               cursor: "pointer",
-              transition: "all 0.15s",
+              transition: "all 0.2s ease",
               position: "relative",
             }}
             onMouseEnter={(e) => {
@@ -79,8 +86,7 @@ export function AgemonList({ agemon, projectName, onSelect }: AgemonListProps) {
                 position: "absolute",
                 top: "8px",
                 left: "8px",
-                background:
-                  profile.source === "command" ? "#2c3e50" : "#27ae60",
+                background: SOURCE_BADGE[profile.source]?.bg ?? "#666",
                 color: "#fff",
                 padding: "1px 5px",
                 borderRadius: "3px",
@@ -89,7 +95,7 @@ export function AgemonList({ agemon, projectName, onSelect }: AgemonListProps) {
                 fontFamily: "var(--font-mono, monospace)",
               }}
             >
-              {profile.source === "command" ? "CMD" : "MCP"}
+              {SOURCE_BADGE[profile.source]?.label ?? profile.source}
             </span>
 
             {/* Level badge - top right */}
