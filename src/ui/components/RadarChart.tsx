@@ -1,5 +1,4 @@
-import type { AgemonStats, AgemonType, StatName } from "../../engine/types.js";
-import { STAT_EMOJI } from "../../engine/type-system.js";
+import type { AgemonStats, AgemonType } from "../../engine/types.js";
 
 interface RadarChartProps {
   stats: AgemonStats;
@@ -16,6 +15,15 @@ const STAT_KEYS: (keyof AgemonStats)[] = [
   "synergy",
 ];
 
+const STAT_LABELS: Record<keyof AgemonStats, string> = {
+  knowledge: "KNW",
+  arsenal: "ARS",
+  reflex: "RFX",
+  mastery: "MST",
+  guard: "GRD",
+  synergy: "SYN",
+};
+
 const TYPE_COLORS: Record<AgemonType, string> = {
   scholar: "#4A90D9",
   arsenal: "#E74C3C",
@@ -26,8 +34,11 @@ const TYPE_COLORS: Record<AgemonType, string> = {
 };
 
 export function RadarChart({ stats, types, size = 200 }: RadarChartProps) {
-  const center = size / 2;
-  const radius = size * 0.38;
+  const pad = 30; // padding for labels
+  const innerSize = size;
+  const svgSize = size + pad * 2;
+  const center = svgSize / 2;
+  const radius = innerSize * 0.38;
   const numAxes = 6;
   const angleStep = (Math.PI * 2) / numAxes;
   const startAngle = -Math.PI / 2; // Start from top
@@ -51,7 +62,7 @@ export function RadarChart({ stats, types, size = 200 }: RadarChartProps) {
     .join(" ");
 
   return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+    <svg width={svgSize} height={svgSize} viewBox={`0 0 ${svgSize} ${svgSize}`}>
       {/* Grid */}
       {gridLevels.map((level) => {
         const gridPoints = Array.from({ length: numAxes })
@@ -100,10 +111,10 @@ export function RadarChart({ stats, types, size = 200 }: RadarChartProps) {
         return <circle key={i} cx={x} cy={y} r={3} fill={color} />;
       })}
 
-      {/* Labels: emoji + value */}
+      {/* Labels: abbreviation + value */}
       {STAT_KEYS.map((key, i) => {
-        const [x, y] = getPoint(i, 125);
-        const emoji = STAT_EMOJI[key as StatName];
+        const [x, y] = getPoint(i, 128);
+        const label = STAT_LABELS[key];
         const value = stats[key];
         return (
           <text
@@ -112,11 +123,11 @@ export function RadarChart({ stats, types, size = 200 }: RadarChartProps) {
             y={y}
             textAnchor="middle"
             dominantBaseline="central"
-            fontSize={11}
+            fontSize={10}
             fontFamily="var(--font-mono, monospace)"
             fill="var(--text-secondary, #636e72)"
           >
-            {emoji} {value}
+            {label} {value}
           </text>
         );
       })}

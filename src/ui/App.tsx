@@ -92,7 +92,12 @@ export function App() {
                 }
               />
             ) : (
-              <SearchTab data={data} />
+              <SearchTab
+                data={data}
+                onSelectAgemon={(profile) =>
+                  setView({ type: "detail", profile })
+                }
+              />
             )}
           </>
         )}
@@ -131,7 +136,7 @@ const styles: Record<string, React.CSSProperties> = {
     color: "var(--text-muted, #9e9eae)",
   },
   main: {
-    maxWidth: "720px",
+    maxWidth: "800px",
     margin: "0 auto",
     padding: "20px 16px",
   },

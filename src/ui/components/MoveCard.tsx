@@ -4,6 +4,7 @@ import { TYPE_COLORS } from "../../engine/type-system.js";
 
 interface MoveCardProps {
   move: Move;
+  count?: number;
 }
 
 const STAT_TYPE_MAP: Record<StatName, string> = {
@@ -32,7 +33,7 @@ const CATEGORY_SOURCE: Record<string, { bg: string; color: string; label: string
   guard: { bg: "#4A90D9", color: "#fff", label: "Perm" },
 };
 
-export function MoveCard({ move }: MoveCardProps) {
+export function MoveCard({ move, count = 1 }: MoveCardProps) {
   const [expanded, setExpanded] = useState(false);
   const agemonType = STAT_TYPE_MAP[move.type] as keyof typeof TYPE_COLORS;
   const typeColor = TYPE_COLORS[agemonType]?.primary ?? "#999";
@@ -66,9 +67,27 @@ export function MoveCard({ move }: MoveCardProps) {
             fontWeight: 700,
             color: "var(--text-primary, #1a1a2e)",
             fontSize: "13px",
+            display: "flex",
+            alignItems: "center",
+            gap: "6px",
           }}
         >
           {move.name}
+          {count > 1 && (
+            <span
+              style={{
+                background: typeColor,
+                color: "#fff",
+                padding: "1px 6px",
+                borderRadius: "8px",
+                fontSize: "10px",
+                fontWeight: 700,
+                fontFamily: "var(--font-mono, monospace)",
+              }}
+            >
+              {"\u00D7"}{count}
+            </span>
+          )}
         </span>
         <div style={{ display: "flex", alignItems: "center", gap: "6px", flexShrink: 0 }}>
           <span

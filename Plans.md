@@ -73,6 +73,18 @@
 - [x] App.tsx — PARTY/SEARCH tabs, detail drill-down, /api/dashboard fetch
 - [x] Vite proxy config for dev (UI:3333 -> API:3334)
 
+## Phase 5.5: Dashboard UX Overhaul `cc:DONE`
+- [x] **Move deduplication** — MoveList groups identical moves with `×N` count badge
+- [x] **AgemonDetail restructure** — Identity section (CMD/MCP badge + source + stage title), Evolution PATH before Moves, category filter chips (All/CMD/Hook/Knowledge/Guard)
+- [x] **TrainerCard enhancement** — Type Spectrum distribution bar, strongest Agemon highlight, "Tools" label for equipment
+- [x] **Party grid layout** — 3-column responsive card grid with hover animations, per-card scope indicator (folder icon + project name or globe + Global)
+- [x] **Unified Party list** — Merged global/project sections into single "Party (N)" with per-card scope badges
+- [x] **SearchTab overhaul** — Category filter chips, move deduplication, grouped by Agemon with mini-sprite avatars
+- [x] **Search→Detail navigation** — Agemon name headers clickable with → arrow, navigates to AgemonDetail
+- [x] **RadarChart labels** — Added 3-letter stat abbreviations (KNW/ARS/RFX/MST/GRD/SYN) with SVG padding fix
+- [x] **Minor UX fixes** — "tap to expand"→"click to expand", identity line shows evolution stage (`· Teen Specialist`)
+- [x] **Layout** — maxWidth 720→800px for better content density
+
 ## Phase 6: Share + Polish `cc:TODO`
 - [x] `src/share/card-renderer.ts` — 1200x630px PNG generation (trainer + agemon cards)
 - [x] `src/share/canvas.d.ts` — Type declarations for optional canvas module
@@ -83,7 +95,7 @@
 - [ ] npm publish preparation
 
 ## Test Summary
-- 9 test files, 68 tests total — all passing
+- 15 test files, 100 tests total — all passing
 - TypeScript strict mode — type check passing
 
 ## Architecture Decision Log
